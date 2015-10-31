@@ -31,5 +31,7 @@ to another folder with a different config and run it in parallel.
 #####`bot.py`
 Contains the bot IRC protocol. The main guts of the bot are here.
 
+`privmsg` is where new messages arrive, `self.write(msg)` is what you use to talk.
+
 # Contact
 If you have any extra questions about the code, you can send me a PM on twitch: @ehsankia
