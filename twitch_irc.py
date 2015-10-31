@@ -26,7 +26,8 @@ class BotFactory(protocol.ClientFactory):
 if __name__ == "__main__":
     # Make logging format prettier
     logging.basicConfig(format="[%(asctime)s] %(message)s",
-                        datefmt="%H:%M:%S")
+                        datefmt="%H:%M:%S",
+                        level=logging.INFO)
 
     # Connect to Twitch IRC server
     reactor.connectTCP('irc.twitch.tv', 6667, BotFactory())
