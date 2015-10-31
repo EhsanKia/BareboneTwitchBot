@@ -4,14 +4,14 @@ import logging
 
 class TwitchBot(irc.IRCClient, object):
     nickname = "ehsanbot"
-    password = "oauth:100gqmdn3eg2qyaja8nhagkgoxomrp"
+    password = "oauth:lolkswmebx7is0r894xzpy5lufwsl7"
     channel = "#ehsankia"
 
     def signedOn(self):
         self.factory.wait_time = 1
         logging.warning("Signed on as {}".format(self.nickname))
 
-        # Join channel
+        # Set IRC caps for Twitch and join channel
         self.sendLine("CAP REQ :twitch.tv/membership")
         self.sendLine("CAP REQ :twitch.tv/commands")
         self.sendLine("CAP REQ :twitch.tv/tags")
@@ -28,7 +28,7 @@ class TwitchBot(irc.IRCClient, object):
         logging.info("{}: {}".format(name, msg))
 
     def parsemsg(self, s):
-        """Breaks a message from an IRC server into its prefix, command, and arguments."""
+        """Breaks raw IRC message into tags, prefix, command, and arguments."""
         tags, prefix, trailing = {}, '', []
         if s[0] == '@':
             tags_str, s = s[1:].split(' ', 1)
@@ -46,7 +46,7 @@ class TwitchBot(irc.IRCClient, object):
         return tags, prefix, command, args
 
     def lineReceived(self, line):
-        '''Parse IRC line'''
+        '''Handle IRC line'''
         # First, we check for any custom twitch commands
         tags, prefix, cmd, args = self.parsemsg(line)
         if cmd == "hosttarget":
@@ -56,7 +56,7 @@ class TwitchBot(irc.IRCClient, object):
         elif cmd == "notice":
             self.notice(tags, args)
 
-        # Remove tag information
+        # Remove IRCv3 tag information
         if line[0] == "@":
             line = line.split(' ', 1)[1]
 
@@ -64,7 +64,7 @@ class TwitchBot(irc.IRCClient, object):
         super(TwitchBot, self).lineReceived(line)
 
     def hostTarget(self, channel, target):
-        '''Track and update hosting status'''
+        '''Track Twitch hosting status'''
         target = target.split(' ')[0]
         if target == "-":
             logging.warning("Exited host mode")
@@ -72,14 +72,14 @@ class TwitchBot(irc.IRCClient, object):
             logging.warning("Now hosting {}".format(target))
 
     def clearChat(self, channel, target=None):
-        '''Log chat clear notices'''
+        '''Track chat clear notices'''
         if target:
             logging.warning("{} was timed out".format(target))
         else:
             logging.warning("chat was cleared")
 
     def notice(self, tags, args):
-        '''Log all chat mode changes'''
+        '''Track all other Twitch notices'''
         if "msg-id" not in tags:
             return
         logging.warning(tags['msg-id'])
