@@ -8,6 +8,8 @@ and extra Twitch-API commands defined in the specs.
 It does absolutely nothing else than connecting to a single channel
 and logging various events such as messages and notices.
 
+If you want a bot with slightly more meat and modular command support, check out [SimpleTwitchBot](https://github.com/EhsanKia/SimpleTwitchBot).
+
 # Installation and usage
 All you should need is Pyhton 2.7+ with [Twisted](https://twistedmatrix.com/trac/) installed.
 You then copy this project in a folder, configure the bot and run `twitch_irc.py`.
